@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "Browser Manager",
+    "description": "Manages your open tabs. Icon by Icons8.",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": "images/icons8-globe-50.png"
+    },
+    "permissions": [
+      "tabs"
+    ]
+}
