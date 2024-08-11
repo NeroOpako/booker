@@ -43,4 +43,14 @@ function createBookmarkElement(bookmark) {
   return bookmarkDiv;
 }
 
+function searchBookmarks(query) {
+  bookmarksList.replaceChildren();
+  browser.bookmarks.search(query).then((bookmarkItems) => {
+    for (const item of bookmarkItems) {
+      const bookmarkElement = createBookmarkElement(item);
+      bookmarksList.appendChild(bookmarkElement);
+    }
+  });
+}
+
 

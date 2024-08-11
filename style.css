@@ -1,6 +1,7 @@
 :root {
     --text-color: #7c7f81;
     --background-color: #f1f3f4;
+    --search-bar-bg-color: #dfe3e5;
 }
 
 @font-face { 
@@ -56,3 +57,19 @@ html {
     font-size: 1.5em;
 }
 
+#search-bar-container {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    width: 90%;
+    height: 15px;
+    border-radius: 25px;
+    border: none;
+    background-color: var(--search-bar-bg-color);
+    padding: 12px 20px 12px 40px;
+    background-image: url('images/icons8-search-21.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+}
