@@ -1,13 +1,22 @@
 {
     "manifest_version": 3,
-    "name": "Browser Manager",
-    "description": "Manages your open tabs. Icon by Icons8.",
+    "name": "Favorites Manager",
+    "description": "Manages your favorites. Icon by Icons8.",
     "version": "1.0",
     "action": {
-      "default_popup": "popup/popup.html",
       "default_icon": "images/icons8-globe-50.png"
     },
+    "chrome_url_overrides" : {
+      "newtab": "newtab.html"
+    },
     "permissions": [
-      "tabs"
-    ]
+      "bookmarks"
+    ],
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "favmanager@neropako.im",
+        "strict_min_version": "58.0"
+      }
+    }
+
 }

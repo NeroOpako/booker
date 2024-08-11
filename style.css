@@ -1,0 +1,58 @@
+:root {
+    --text-color: #7c7f81;
+    --background-color: #f1f3f4;
+}
+
+@font-face { 
+    font-family: opensans; 
+    src: url('../OpenSans-Regular.ttf') 
+}
+
+html {
+    font-family: opensans;
+}
+
+
+body {
+    background-color:  var(----text-color);
+    padding: 20px;
+}
+
+html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    height: auto;
+    width: auto;
+}
+
+#favorites-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3vw;
+}
+
+.favorites-item {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(----text-color);
+}
+
+.favorites-item img {
+    width: 75px;
+    height: 75px;
+}
+
+.favorites-item span {
+    white-space: nowrap; 
+    max-width: 260px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.5em;
+}
+
