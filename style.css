@@ -31,6 +31,8 @@ html {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 3vw;
+    width: 90%;
+    margin-top: 20px;
 }
 
 .favorites-item {

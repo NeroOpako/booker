@@ -1,7 +1,8 @@
 var bookmarksLocal = [];
 
-function initializeBookmarks() {
+async function initializeBookmarks() {
     bookmarksLocal = [];
+    let resultOld = await browser.storage.local.get("bookmarks");
     browser.bookmarks.getTree().then((bookmarks) => {
         bookmarks.forEach((folder) => {
             if (folder.children) {
@@ -14,32 +15,38 @@ function initializeBookmarks() {
 
         bookmarksLocal.forEach(bookmark => {
             if(!bookmark.favicon) {
-                promises.push(fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=50", {
-                    method: "GET",
-                    mode: "cors",
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const reader = new FileReader();
-                    reader.onloadend = function() {
-                        // The result is a Data URL
-                        const dataUrl = reader.result;
-                        bookmark.favicon = dataUrl;
-                    };
-                    reader.readAsDataURL(blob);
-                })
-                .catch((er) => {
-                    console.log(er);
-                }));
+                if(resultOld && resultOld.bookmarks && resultOld.bookmarks.length > 0) {
+                    let bookmarksOld = JSON.parse(resultOld.bookmarks);
+                    let bookmarkItem = bookmarksOld.filter((b) => b.url.toLowerCase().includes(bookmark.url.toLowerCase()));
+                    bookmark.favicon = bookmarkItem.favicon;
+                } else {
+                    promises.push(fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=50", {
+                        method: "GET",
+                        mode: "cors",
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            // The result is a Data URL
+                            const dataUrl = reader.result;
+                            bookmark.favicon = dataUrl;
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch((er) => {
+                        console.log(er);
+                    }));
+                }   
             }
         });
         // Save to local storage
-        Promise.all(promises).then(() => browser.storage.local.set({ "bookmarks": bookmarksLocal }));
+        Promise.all(promises).then(() => browser.storage.local.set({ "bookmarks":  JSON.stringify(bookmarksLocal)}).catch((er) => { console.log(er); }));
     });
 }
 
@@ -55,52 +62,10 @@ function processBookmarks(bookmarks) {
       }
     });
   }
-  
 
-browser.runtime.onInstalled.addListener(initializeBookmarks());
-browser.bookmarks.onMoved.addListener(initializeBookmarks());
-browser.bookmarks.onCreated.addListener(initializeBookmarks());
-
-browser.bookmarks.onChanged.addListener((id, changeInfo) => {
-    browser.storage.local.get("bookmarks").then((bookmarks) => {
-        let bookmark = bookmarks.find((el) => el.id == id);
-        var promises = [];
-        if(changeInfo.url) {
-            bookmark.url = changeInfo.url;
-            promises.push(fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=50", {
-                method: "GET",
-                mode: "cors",
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    // The result is a Data URL
-                    const dataUrl = reader.result;
-                    bookmark.favicon = dataUrl;
-                };
-                reader.readAsDataURL(blob);
-            })
-            .catch((er) => {
-                console.log(er);
-            }));
-        }
-        if(changeInfo.title) {
-            bookmark.title = changeInfo.title;
-        }
-        Promise.all(promises).then(() => browser.storage.local.set({ "bookmarks": bookmarks }));
-    });
-});
-
-browser.bookmarks.onRemoved.addListener((id) => {
-    browser.storage.local.get("bookmarks").then((bookmarks) => {
-        bookmarks.splice(bookmarks.indexOf(bookmarks.findIndex(bookmark => bookmark.id == id)), 1);
-        browser.storage.local.set({ "bookmarks": bookmarks });
-    });
-});
+browser.runtime.onInstalled.addListener(initializeBookmarks);
+browser.bookmarks.onMoved.addListener(initializeBookmarks);
+browser.bookmarks.onCreated.addListener(initializeBookmarks);
+browser.bookmarks.onChanged.addListener(initializeBookmarks);
+browser.bookmarks.onRemoved.addListener(initializeBookmarks);
 
