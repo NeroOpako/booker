@@ -2,7 +2,7 @@ const bookmarksList = document.getElementById('favorites-container');
 const searchBox = document.getElementById('search-bar-input');
 var objectUrls = [];
 
-searchBox.addEventListener("change", (event) => {
+searchBox.addEventListener('input', (event) => {
   searchBookmarks(event.target.value);
 });
 
@@ -49,12 +49,11 @@ function createBookmarkElement(bookmark) {
 function createClearSearchElement() {
   // Create a div element to hold the bookmark information
   const bookmarkDiv = document.createElement('a');
-  bookmarkDiv.className = 'favorites-item';
+  bookmarkDiv.className = 'favorites-item clear';
   bookmarkDiv.href = "#";
   bookmarkDiv.onclick = () => {searchBox.value = ''; searchBookmarks(''); return false; };
   // Create an image element for the favicon
   const faviconImg = document.createElement('img');
-  faviconImg.src = "images/icons8-clear-50.png"; // Use a default icon if favicon is not available
   faviconImg.alt = `Pulisci ricerca favicon`;
   bookmarkDiv.appendChild(faviconImg);
 

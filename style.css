@@ -4,6 +4,27 @@
     --search-bar-bg-color: #dfe3e5;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #f1f3f4;
+        --background-color: #181818;
+        --search-bar-bg-color: #2a2a2a;
+    }
+
+    .clear img {
+        content: url('images/icons8-cancella-simbolo-64-white.png');
+    }
+
+}
+
+@media (prefers-color-scheme: light) {
+
+    .clear img {
+        content: url('images/icons8-cancella-simbolo-64-black.png');
+    }
+
+}
+
 @font-face { 
     font-family: opensans; 
     src: url('../OpenSans-Regular.ttf') 
@@ -15,7 +36,7 @@ html {
 
 
 body {
-    background-color:  var(----text-color);
+    background-color: var(--background-color);
     padding: 20px;
 }
 
@@ -31,7 +52,6 @@ html {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 3vw;
-    width: 90%;
     margin-top: 20px;
 }
 
@@ -43,36 +63,36 @@ html {
     align-items: center;
     text-align: center;
     text-decoration: none;
-    color: var(----text-color);
+    color: var(--text-color);
 }
 
 .favorites-item img {
     width: 75px;
     height: 75px;
+    border-radius: 10%;
 }
 
 .favorites-item span {
     white-space: nowrap; 
-    max-width: 260px; 
+    width: 150px; 
+    max-width: 150px; 
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.5em;
+    text-align: center;
 }
 
 #search-bar-container {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-content: center;
-    align-items: center;
 }
 
 #search-bar-input {
-    width: 90%;
+    width: 100%;
     height: 15px;
     border-radius: 25px;
     border: none;
     background-color: var(--search-bar-bg-color);
+    color: var(--text-color);
     padding: 12px 20px 12px 40px;
     background-image: url('images/icons8-search-21.png');
     background-position: 10px 10px; 

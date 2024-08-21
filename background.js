@@ -38,7 +38,7 @@ async function processBookmarks(bookmarks) {
 
   
 async function getFavicon(bookmark) {
-    fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=50", {
+    fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=64", {
         method: "GET",
         mode: "cors",
     })
