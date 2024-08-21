@@ -78,7 +78,7 @@ function searchBookmarks(query) {
     browser.storage.local.get("bookmarks").then((result) => {
       if(result && result.bookmarks && result.bookmarks.length > 0) {
         let bookmarks = result.bookmarks;
-        let bookmarkItems = bookmarks.filter((bookmark) => bookmark.name.toLowerCase().includes(query.toLowerCase()) || bookmark.url.toLowerCase().includes(query.toLowerCase()));
+        let bookmarkItems = bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()) || bookmark.url.toLowerCase().includes(query.toLowerCase()));
         for (const item of bookmarkItems) {
           const bookmarkElement = createBookmarkElement(item);
           bookmarksList.appendChild(bookmarkElement);
