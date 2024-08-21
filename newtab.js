@@ -9,7 +9,7 @@ searchBox.addEventListener("change", (event) => {
 function renderBookmarks() {
   browser.storage.local.get("bookmarks").then((result) => {
     if(result && result.bookmarks && result.bookmarks.length > 0) {
-      let bookmarks = JSON.parse(result.bookmarks);
+      let bookmarks = result.bookmarks;
       for (const item of bookmarks) {
         const bookmarkElement = createBookmarkElement(item);
         bookmarksList.appendChild(bookmarkElement);
@@ -77,7 +77,7 @@ function searchBookmarks(query) {
     bookmarksList.appendChild(createClearSearchElement());
     browser.storage.local.get("bookmarks").then((result) => {
       if(result && result.bookmarks && result.bookmarks.length > 0) {
-        let bookmarks = JSON.parse(result.bookmarks);
+        let bookmarks = result.bookmarks;
         let bookmarkItems = bookmarks.filter((bookmark) => bookmark.name.toLowerCase().includes(query.toLowerCase()) || bookmark.url.toLowerCase().includes(query.toLowerCase()));
         for (const item of bookmarkItems) {
           const bookmarkElement = createBookmarkElement(item);
