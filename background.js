@@ -15,7 +15,7 @@ async function processBookmarks(bookmarks) {
         processBookmarks(bookmark.children);
       } else if (bookmark.url) {
         // If the bookmark is a link, log its title and URL
-        favicon = await getFavicon(bookmark.url);
+        let favicon = await getFavicon(bookmark.url);
         await browser.storage.local.set({ [bookmark.id] : favicon}).catch((er) => { console.log(er); });
       }
     });
