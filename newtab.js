@@ -22,7 +22,7 @@ async function processBookmarks(bookmarks) {
       processBookmarks(bookmark.children);
     } else if (bookmark.url) {
       // If the bookmark is a link, log its title and URL
-      bookmark.favicon = await browser.storage.local.get(bookmark.id);
+      bookmark.favicon = await browser.storage.local.get(bookmark.id)[bookmark.id];
       const bookmarkElement = createBookmarkElement(bookmark);
       bookmarksList.appendChild(bookmarkElement);
     }
