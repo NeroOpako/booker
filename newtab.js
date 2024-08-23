@@ -20,9 +20,9 @@ async function processBookmarks(bookmarks) {
     if (bookmark.children) {
       // If the bookmark is a folder, recursively process its children
       processBookmarks(bookmark.children);
-    } else if (bookmark.url) {
+    } else if (bookmark.url && bookmark.parentId == 'toolbar_____') {
       // If the bookmark is a link, log its title and URL
-     browser.storage.local.get(bookmark.id).then((b) => {
+      browser.storage.local.get(bookmark.id).then((b) => {
         bookmark.favicon = b[bookmark.id];  
         const bookmarkElement = createBookmarkElement(bookmark);
         bookmarksList.appendChild(bookmarkElement);
