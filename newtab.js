@@ -16,15 +16,18 @@ function renderBookmarks() {
 }
 
 async function processBookmarks(bookmarks) {
-  bookmarks.forEach(async (bookmark) => {
+  bookmarks.forEach((bookmark) => {
     if (bookmark.children) {
       // If the bookmark is a folder, recursively process its children
       processBookmarks(bookmark.children);
     } else if (bookmark.url) {
       // If the bookmark is a link, log its title and URL
-      bookmark.favicon = await browser.storage.local.get(bookmark.id)[bookmark.id];
-      const bookmarkElement = createBookmarkElement(bookmark);
-      bookmarksList.appendChild(bookmarkElement);
+     browser.storage.local.get(bookmark.id).then((b) => {
+        bookmark.favicon = b[bookmark.id];  
+        const bookmarkElement = createBookmarkElement(bookmark);
+        bookmarksList.appendChild(bookmarkElement);
+      });
+     
     }
   });
 }
