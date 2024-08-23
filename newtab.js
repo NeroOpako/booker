@@ -1,19 +1,30 @@
 const bookmarksList = document.getElementById('favorites-container');
 const searchBox = document.getElementById('search-bar-input');
-var objectUrls = [];
 
 searchBox.addEventListener('input', (event) => {
   searchBookmarks(event.target.value);
 });
 
 function renderBookmarks() {
-  browser.storage.local.get("bookmarks").then((result) => {
-    if(result && result.bookmarks && result.bookmarks.length > 0) {
-      let bookmarks = result.bookmarks;
-      for (const item of bookmarks) {
-        const bookmarkElement = createBookmarkElement(item);
-        bookmarksList.appendChild(bookmarkElement);
-      }
+  browser.bookmarks.getTree().then((bookmarks) => {
+    bookmarks.forEach((folder) => {
+        if (folder.children) {
+            processBookmarks(bookmarks);
+        }
+    });
+  });
+}
+
+async function processBookmarks(bookmarks) {
+  bookmarks.forEach(async (bookmark) => {
+    if (bookmark.children) {
+      // If the bookmark is a folder, recursively process its children
+      processBookmarks(bookmark.children);
+    } else if (bookmark.url) {
+      // If the bookmark is a link, log its title and URL
+      bookmark.favicon = await browser.storage.local.get(bookmark.id);
+      const bookmarkElement = createBookmarkElement(bookmark);
+      bookmarksList.appendChild(bookmarkElement);
     }
   });
 }
@@ -69,20 +80,11 @@ function createClearSearchElement() {
 }
 
 function searchBookmarks(query) {
-  objectUrls.forEach((el) => URL.revokeObjectURL(el));
-  objectUrls = [];
   bookmarksList.replaceChildren();
   if(query && query.length > 0) {
     bookmarksList.appendChild(createClearSearchElement());
-    browser.storage.local.get("bookmarks").then((result) => {
-      if(result && result.bookmarks && result.bookmarks.length > 0) {
-        let bookmarks = result.bookmarks;
-        let bookmarkItems = bookmarks.filter((bookmark) => bookmark.title.toLowerCase().includes(query.toLowerCase()) || bookmark.url.toLowerCase().includes(query.toLowerCase()));
-        for (const item of bookmarkItems) {
-          const bookmarkElement = createBookmarkElement(item);
-          bookmarksList.appendChild(bookmarkElement);
-        }
-      }
+    browser.bookmarks.search(query).then((bookmarks) => {
+      processBookmarks(bookmarks);
     });
   } else {
     renderBookmarks();

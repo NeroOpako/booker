@@ -1,12 +1,4 @@
-var bookmarksOld = [];
-var bookmarksNew = [];
-
 async function initializeBookmarks() {
-    if(bookmarksOld == []) {
-        resultOld = await browser.storage.local.get("bookmarks");
-        bookmarksOld = (resultOld && resultOld.bookmarks && resultOld.bookmarks.length > 0) ? JSON.parse(resultOld.bookmarks) : [];    
-    }
-    bookmarksNew = [];
     browser.bookmarks.getTree().then((bookmarks) => {
         bookmarks.forEach((folder) => {
             if (folder.children) {
@@ -23,22 +15,14 @@ async function processBookmarks(bookmarks) {
         processBookmarks(bookmark.children);
       } else if (bookmark.url) {
         // If the bookmark is a link, log its title and URL
-        let bookmarkItem = bookmarksOld.filter((b) => b.url.toLowerCase().includes(bookmark.url.toLowerCase()));
-        if(bookmarkItem && bookmarkItem.favicon) {
-            bookmark.favicon = bookmarkItem.favicon;
-        } else {
-            await getFavicon(bookmark);
-        }   
-        bookmarksNew.push(bookmark);
-        await browser.storage.local.set({ "bookmarks": bookmarksNew}).catch((er) => { console.log(er); });
+        favicon = await getFavicon(bookmark.url);
+        await browser.storage.local.set({ [bookmark.id] : favicon}).catch((er) => { console.log(er); });
       }
     });
 }
 
-
-  
-async function getFavicon(bookmark) {
-    fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + bookmark.url + "&size=64", {
+async function getFavicon(url) {
+    fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + url + "&size=64", {
         method: "GET",
         mode: "cors",
     })
@@ -52,8 +36,7 @@ async function getFavicon(bookmark) {
         const reader = new FileReader();
         reader.onloadend = function() {
             // The result is a Data URL
-            const dataUrl = reader.result;
-            bookmark.favicon = dataUrl;
+            return reader.result;
         };
         reader.readAsDataURL(blob);
     })
@@ -63,8 +46,20 @@ async function getFavicon(bookmark) {
 }
 
 browser.runtime.onInstalled.addListener(initializeBookmarks);
-browser.bookmarks.onMoved.addListener(initializeBookmarks);
-browser.bookmarks.onCreated.addListener(initializeBookmarks);
-browser.bookmarks.onChanged.addListener(initializeBookmarks);
-browser.bookmarks.onRemoved.addListener(initializeBookmarks);
+
+browser.bookmarks.onCreated.addListener(async (id, bookmark) => {
+    let favicon = await getFavicon(bookmark.url);
+    browser.storage.local.set([id],favicon).catch((er) => { console.log(er); });
+});
+
+browser.bookmarks.onChanged.addListener(async (id, changeInfo) => {
+    if(changeInfo.url) {
+        let favicon = await getFavicon(changeInfo.url);
+        browser.storage.local.set([id],favicon).catch((er) => { console.log(er); });
+    }
+});
+
+browser.bookmarks.onRemoved.addListener((id) => {
+    browser.storage.local.remove([id]).catch((er) => { console.log(er); });
+});
 
