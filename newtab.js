@@ -5,6 +5,15 @@ searchBox.addEventListener('input', (event) => {
   searchBookmarks(event.target.value);
 });
 
+document.addEventListener("DOMContentLoaded", function(event) {
+  $("a").on("contextmenu", (event) => {
+    event.preventDefault();
+    contextMenu.style.display = 'block';
+    contextMenu.style.left = `${event.pageX}px`;
+    contextMenu.style.top = `${event.pageY}px`;
+  });     
+});
+
 function renderBookmarks() {
   browser.bookmarks.getTree().then((bookmarks) => {
     bookmarks.forEach((folder) => {
