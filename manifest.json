@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Favorites Manager",
     "description": "Manages your favorites. Icon by Icons8.",
-    "version": "1.0",
+    "version": "1.1",
     "action": {
       "default_icon": "images/icons8-globe-50.png"
     },
