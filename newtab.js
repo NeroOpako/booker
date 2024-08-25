@@ -1,17 +1,20 @@
 const bookmarksList = document.getElementById('favorites-container');
 const searchBox = document.getElementById('search-bar-input');
+const modal = document.getElementById("myModal");
+const span = document.getElementById("closespan");
+
+const titleinput = document.getElementById("titleinput");
+const urlinput = document.getElementById("urlinput");
+const savebtn = document.getElementById("savebtn");
+const deletebtn = document.getElementById("deletebtn");
+
+
+var indexEdited = ""; 
+
+
 
 searchBox.addEventListener('input', (event) => {
   searchBookmarks(event.target.value);
-});
-
-document.addEventListener("DOMContentLoaded", function(event) {
-  $("a").on("contextmenu", (event) => {
-    event.preventDefault();
-    contextMenu.style.display = 'block';
-    contextMenu.style.left = `${event.pageX}px`;
-    contextMenu.style.top = `${event.pageY}px`;
-  });     
 });
 
 function renderBookmarks() {
@@ -46,6 +49,16 @@ function createBookmarkElement(bookmark) {
   const bookmarkDiv = document.createElement('a');
   bookmarkDiv.className = 'favorites-item';
   bookmarkDiv.href=bookmark.url;
+  bookmarkDiv.dataset.index = bookmark.id;
+  bookmarkDiv.dataset.title = bookmark.title;
+  bookmarkDiv.oncontextmenu = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    modal.style.display = "block";
+    indexEdited = e.target.nodeName != 'A' ? e.target.parentNode.dataset.index : e.target.dataset.index;
+    titleinput.value = e.target.nodeName != 'A' ? e.target.parentNode.dataset.title : e.target.dataset.title;
+    urlinput.value = e.target.nodeName != 'A' ? e.target.parentNode.href : e.target.href;
+  };
   // Create an image element for the favicon
   if(bookmark.favicon) {
     const faviconImg = document.createElement('img');
@@ -61,7 +74,9 @@ function createBookmarkElement(bookmark) {
   // Create a span element for the bookmark title
   const titleSpan = document.createElement('span');
   titleSpan.textContent = bookmark.title;
-
+  titleSpan.oncontextmenu = (e) => {
+    e.preventDefault(); 
+  };
   // Append the favicon and title to the bookmark div
 
   bookmarkDiv.appendChild(titleSpan);
@@ -91,6 +106,7 @@ function createClearSearchElement() {
   return bookmarkDiv;
 }
 
+
 function searchBookmarks(query) {
   bookmarksList.replaceChildren();
   if(query && query.length > 0) {
@@ -103,5 +119,50 @@ function searchBookmarks(query) {
   }
 }
 
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+  indexEdited = "";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+savebtn.onclick = function() {
+  browser.bookmarks.update(indexEdited, {title: titleinput.value , url: urlinput.value }).finally(() => {
+    getFavicon(changeInfo.url).then(dataURL => browser.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); }).finally(resetAfterEdit)); 
+  });
+}
+
+deletebtn.onclick = function() {
+  browser.bookmarks.remove(indexEdited).finally(resetAfterEdit);
+}
+
 renderBookmarks();
 
+function resetAfterEdit() {
+  indexEdited = "";
+  titleinput.value = "";
+  urlinput.value = "";
+  modal.style.display = "none";
+  bookmarksList.replaceChildren();
+  renderBookmarks();
+}
+
+function getFavicon(url) {
+  return fetch("https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + url + "&size=64", {
+      method: "GET",
+      mode: "cors",
+  })
+  .then(response => response.blob())
+  .then(blob => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  }));
+}

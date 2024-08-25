@@ -15,13 +15,23 @@
       
     </div>
 
-    <div class="context-menu" id="contextMenu">
-      <ul>
-          <li id="menuItem1">Option 1</li>
-          <li id="menuItem2">Option 2</li>
-          <li id="menuItem3">Option 3</li>
-      </ul>
-  </div>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <h2>Nome</h2>
+        <input id="titleinput" type="text" placeholder="Nome..."/>
+        <h2>Url</h2>
+        <input id="urlinput" type="url" placeholder="Url..."/>
+        <div class="btn-container">
+          <button id="deletebtn" class="deletebtn">Elimina</button>
+          <button id="savebtn" class="savebtn">Salva</button>
+          <button id="closespan" class="deletebtn">Chiudi</button>  
+        </div>
+      </div>
+    </div>
+
+
     <script src="./newtab.js" type="module"></script>
   </body>
 </html>
