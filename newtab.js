@@ -1,12 +1,12 @@
 const bookmarksList = document.getElementById('favorites-container');
 const searchBox = document.getElementById('search-bar-input');
 const modal = document.getElementById("myModal");
-const span = document.getElementById("closespan");
 
 const titleinput = document.getElementById("titleinput");
 const urlinput = document.getElementById("urlinput");
 const savebtn = document.getElementById("savebtn");
 const deletebtn = document.getElementById("deletebtn");
+const closebtn = document.getElementById("closebtn");
 
 
 var indexEdited = ""; 
@@ -119,22 +119,21 @@ function searchBookmarks(query) {
   }
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-  indexEdited = "";
-}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
-    modal.style.display = "none";
+    resetAfterEdit(true);
   }
+}
+
+closebtn.onclick = function() {
+  resetAfterEdit(true);
 }
 
 savebtn.onclick = function() {
   browser.bookmarks.update(indexEdited, {title: titleinput.value , url: urlinput.value }).finally(() => {
-    getFavicon(changeInfo.url).then(dataURL => browser.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); }).finally(resetAfterEdit)); 
+    getFavicon(urlinput.value).then(dataURL => browser.storage.local.set({ [indexEdited] : dataURL}).catch((er) => { console.log(er); }).finally(resetAfterEdit)); 
   });
 }
 
@@ -144,13 +143,19 @@ deletebtn.onclick = function() {
 
 renderBookmarks();
 
-function resetAfterEdit() {
+function resetAfterEdit(dontReplaceChildren) {
+  modal.classList.add("fadeout");
   indexEdited = "";
-  titleinput.value = "";
-  urlinput.value = "";
-  modal.style.display = "none";
-  bookmarksList.replaceChildren();
-  renderBookmarks();
+  setTimeout(() => {
+    modal.style.display = "none";
+    modal.classList.remove("fadeout");
+    titleinput.value = "";
+    urlinput.value = "";
+  }, 150);
+  if(!dontReplaceChildren) {
+    bookmarksList.replaceChildren();
+    renderBookmarks();
+  }
 }
 
 function getFavicon(url) {

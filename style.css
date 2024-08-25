@@ -114,6 +114,11 @@ html {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    animation:fadein .2s;
+}
+
+.fadeout {
+    animation: fadeout .2s;
 }
 
 /* Modal Content/Box */
@@ -155,4 +160,42 @@ html {
     flex-direction: row;
     gap: 10px;
     justify-content: space-evenly;
+}
+
+
+@keyframes fadein {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+}
+
+@keyframes fadeout {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+
+@keyframes fade-to-left {
+    from {
+      opacity: 0;
+      transform: 100%;
+    }
+    
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  
+  
+.favorites-item {
+    animation-name: fade-to-left;
+    animation-duration: 200ms;
 }
