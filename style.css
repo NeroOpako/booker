@@ -49,7 +49,7 @@ html {
     width: auto;
 }
 
-#favorites-container {
+.favorites-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -84,11 +84,11 @@ html {
     text-align: center;
 }
 
-#search-bar-container {
+.search-container {
     display: flex;
 }
 
-#search-bar-input {
+.search-input {
     width: 100%;
     height: 15px;
     border-radius: 12px;
@@ -131,6 +131,11 @@ html {
     width: 40%; /* Could be more or less, depending on screen size */
     display: flex;
     flex-direction: column;
+    gap: 10px;
+}
+
+.modal label {
+    font-size: 1.5em;
 }
 
 .modal-content input[type="text"], .modal-content input[type="url"] {

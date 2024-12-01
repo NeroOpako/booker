@@ -1,17 +1,25 @@
-const bookmarksList = document.getElementById('favorites-container');
-const searchBox = document.getElementById('search-bar-input');
-const modal = document.getElementById("myModal");
+const bookmarksList = document.getElementById('favoritesContainer');
+const searchBox = document.getElementById('searchInput');
+const modal = document.getElementById("modal");
 
-const titleinput = document.getElementById("titleinput");
-const urlinput = document.getElementById("urlinput");
-const savebtn = document.getElementById("savebtn");
-const deletebtn = document.getElementById("deletebtn");
-const closebtn = document.getElementById("closebtn");
+const titleLabel = document.getElementById("titleLabel");
+const urlLabel = document.getElementById("urlLabel")
+const titleinput = document.getElementById("titleInput");
+const urlinput = document.getElementById("urlInput");
+const savebtn = document.getElementById("saveBtn");
+const deletebtn = document.getElementById("deleteBtn");
+const closebtn = document.getElementById("closeBtn");
 
+deletebtn.innerText = chrome.i18n.getMessage("edit_delete");
+savebtn.innerText = chrome.i18n.getMessage("edit_save");
+closebtn.innerText = chrome.i18n.getMessage("edit_close");
+titleLabel.innerText = chrome.i18n.getMessage("edit_title");
+urlLabel.innerText = chrome.i18n.getMessage("edit_url");
+titleinput.placeholder  = chrome.i18n.getMessage("edit_title") + "...";
+urlinput.placeholder  = chrome.i18n.getMessage("edit_url") + "...";
+searchBox.placeholder  = chrome.i18n.getMessage("search_placeholder") + "...";
 
-var indexEdited = ""; 
-
-
+var indexEdited = "";
 
 searchBox.addEventListener('input', (event) => {
   searchBookmarks(event.target.value);
@@ -92,12 +100,12 @@ function createClearSearchElement() {
   bookmarkDiv.onclick = () => {searchBox.value = ''; searchBookmarks(''); return false; };
   // Create an image element for the favicon
   const faviconImg = document.createElement('img');
-  faviconImg.alt = `Pulisci ricerca favicon`;
+  faviconImg.alt = chrome.i18n.getMessage("search_clean") + ` favicon`;
   bookmarkDiv.appendChild(faviconImg);
 
   // Create a span element for the bookmark title
   const titleSpan = document.createElement('span');
-  titleSpan.textContent = "Pulisci ricerca";
+  titleSpan.textContent = chrome.i18n.getMessage("search_clean");
 
   // Append the favicon and title to the bookmark div
 

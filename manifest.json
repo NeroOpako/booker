@@ -1,8 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Favorites Manager",
-    "description": "Manages your favorites. Icon by Icons8.",
-    "version": "1.1",
+    "name": "__MSG_extension_name__",
+    "description": "__MSG_extension_desc__",
+    "version": "1.2",
+    "default_locale" : "en",
     "action": {
       "default_icon": "images/icons8-globe-50.png"
     },

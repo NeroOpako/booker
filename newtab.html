@@ -7,30 +7,24 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div id="search-bar-container">
-        <input id="search-bar-input" placeholder="Cerca..."/>
+    <div class="search-container">
+        <input id="searchInput" class="search-input"/>
     </div>
-    <div id="favorites-container">
-      
-    </div>
+    <div id="favoritesContainer" class="favorites-container"></div>
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
+    <div id="modal" class="modal">
       <div class="modal-content">
-        <h2>Nome</h2>
-        <input id="titleinput" type="text" placeholder="Nome..."/>
-        <h2>Url</h2>
-        <input id="urlinput" type="url" placeholder="Url..."/>
+        <label id="titleLabel" for="titleInput"></label>
+        <input id="titleInput" type="text"/>
+        <label id="urlLabel" for="urlInput"></label>
+        <input id="urlInput" type="url"/>
         <div class="btn-container">
-          <button id="deletebtn" class="deletebtn">Elimina</button>
-          <button id="savebtn" class="savebtn">Salva</button>
-          <button id="closebtn" class="closebtn">Chiudi</button>  
+          <button id="deleteBtn"></button>
+          <button id="saveBtn"></button>
+          <button id="closeBtn"></button>  
         </div>
       </div>
     </div>
-
-
     <script src="./newtab.js" type="module"></script>
   </body>
 </html>
