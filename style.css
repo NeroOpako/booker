@@ -91,7 +91,7 @@ html {
 #search-bar-input {
     width: 100%;
     height: 15px;
-    border-radius: 25px;
+    border-radius: 12px;
     border: none;
     background-color: var(--search-bar-bg-color);
     color: var(--text-color);
@@ -125,17 +125,17 @@ html {
 .modal-content {
     color: var(--text-color);
     background-color: var(--background-color);
-    border-radius: 25px;
+    border-radius: 12px;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 40%; /* Could be more or less, depending on screen size */
     display: flex;
     flex-direction: column;
 }
 
 .modal-content input[type="text"], .modal-content input[type="url"] {
     height: 15px;
-    border-radius: 25px;
+    border-radius: 12px;
     border: none;
     background-color: var(--search-bar-bg-color);
     color: var(--text-color);
@@ -146,7 +146,7 @@ html {
     background-color: var(--search-bar-bg-color);
     color: var(--text-color);
     padding: 12px;
-    border-radius: 25px;
+    border-radius: 12px;
     border: none;
 }
 
