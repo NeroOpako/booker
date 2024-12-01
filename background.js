@@ -1,5 +1,5 @@
 function initializeBookmarks() {
-    browser.bookmarks.getTree().then((bookmarks) => {
+    chrome.bookmarks.getTree().then((bookmarks) => {
         bookmarks.forEach((folder) => {
             if (folder.children) {
                 processBookmarks(bookmarks);
@@ -14,7 +14,7 @@ function initializeBookmarks() {
         processBookmarks(bookmark.children);
       } else if (bookmark.url) {
         getFavicon(bookmark.url).then(dataURL => {
-            browser.storage.local.set({ [bookmark.id] : dataURL}).catch((er) => { console.log(er); })
+            chrome.storage.local.set({ [bookmark.id] : dataURL}).catch((er) => { console.log(er); })
         });
       }
     });
@@ -34,23 +34,23 @@ function getFavicon(url) {
     }));
 }
 
-browser.runtime.onInstalled.addListener(initializeBookmarks);
+chrome.runtime.onInstalled.addListener(initializeBookmarks);
 
-browser.bookmarks.onCreated.addListener((id, bookmark) => {
+chrome.bookmarks.onCreated.addListener((id, bookmark) => {
     getFavicon(bookmark.url).then(dataURL => {
-        browser.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); })
+        chrome.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); })
     });
 });
 
-browser.bookmarks.onChanged.addListener((id, changeInfo) => {
+chrome.bookmarks.onChanged.addListener((id, changeInfo) => {
     if(changeInfo.url) {
         getFavicon(changeInfo.url).then(dataURL => {
-            browser.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); })
+            chrome.storage.local.set({ [id] : dataURL}).catch((er) => { console.log(er); })
         });
     }
 });
 
-browser.bookmarks.onRemoved.addListener((id) => {
-    browser.storage.local.remove([id]).catch((er) => { console.log(er); });
+chrome.bookmarks.onRemoved.addListener((id) => {
+    chrome.storage.local.remove([id]).catch((er) => { console.log(er); });
 });
 

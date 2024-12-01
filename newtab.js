@@ -18,7 +18,7 @@ searchBox.addEventListener('input', (event) => {
 });
 
 function renderBookmarks() {
-  browser.bookmarks.getTree().then((bookmarks) => {
+  chrome.bookmarks.getTree().then((bookmarks) => {
     bookmarks.forEach((folder) => {
         if (folder.children) {
             processBookmarks(bookmarks);
@@ -32,9 +32,9 @@ async function processBookmarks(bookmarks) {
     if (bookmark.children) {
       // If the bookmark is a folder, recursively process its children
       processBookmarks(bookmark.children);
-    } else if (bookmark.url && bookmark.parentId == 'toolbar_____') {
+    } else if (bookmark.url && (bookmark.parentId == 'toolbar_____' || bookmark.parentId == "1")) {
       // If the bookmark is a link, log its title and URL
-      browser.storage.local.get(bookmark.id).then((b) => {
+      chrome.storage.local.get(bookmark.id).then((b) => {
         bookmark.favicon = b[bookmark.id];  
         const bookmarkElement = createBookmarkElement(bookmark);
         bookmarksList.appendChild(bookmarkElement);
@@ -111,7 +111,7 @@ function searchBookmarks(query) {
   bookmarksList.replaceChildren();
   if(query && query.length > 0) {
     bookmarksList.appendChild(createClearSearchElement());
-    browser.bookmarks.search(query).then((bookmarks) => {
+    chrome.bookmarks.search(query).then((bookmarks) => {
       processBookmarks(bookmarks);
     });
   } else {
@@ -132,13 +132,13 @@ closebtn.onclick = function() {
 }
 
 savebtn.onclick = function() {
-  browser.bookmarks.update(indexEdited, {title: titleinput.value , url: urlinput.value }).finally(() => {
-    getFavicon(urlinput.value).then(dataURL => browser.storage.local.set({ [indexEdited] : dataURL}).catch((er) => { console.log(er); }).finally(resetAfterEdit)); 
+  chrome.bookmarks.update(indexEdited, {title: titleinput.value , url: urlinput.value }).finally(() => {
+    getFavicon(urlinput.value).then(dataURL => chrome.storage.local.set({ [indexEdited] : dataURL}).catch((er) => { console.log(er); }).finally(resetAfterEdit)); 
   });
 }
 
 deletebtn.onclick = function() {
-  browser.bookmarks.remove(indexEdited).finally(resetAfterEdit);
+  chrome.bookmarks.remove(indexEdited).finally(resetAfterEdit);
 }
 
 renderBookmarks();
