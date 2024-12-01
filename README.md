@@ -1,4 +1,5 @@
 # Booker - Bookmarks in New Tab
 Firefox/Chrome/Edge extension for managing your bookmarks in a new tab. Supports English and Italian.
 
-![image](https://github.com/user-attachments/assets/89cf4d25-919a-4f1d-87bd-e4b0ceec4ba8)
+![image](https://github.com/user-attachments/assets/4cc7ecb8-7cfe-4352-a01c-f7ff424696b7)
+
