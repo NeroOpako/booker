@@ -4,8 +4,8 @@
     "description": "__MSG_extension_desc__",
     "version": "1.2",
     "default_locale" : "en",
-    "action": {
-      "default_icon": "images/icons8-globe-50.png"
+    "icons": {
+      "64": "images/icons8-star-64.png"
     },
     "chrome_url_overrides" : {
       "newtab": "newtab.html"

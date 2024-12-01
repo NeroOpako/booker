@@ -14,7 +14,7 @@
     }
 
     .clear img {
-        content: url('images/icons8-cancella-simbolo-64-white.png');
+        content: url('images/icons8-backspace-64-white.png');
     }
 
 }
@@ -22,7 +22,7 @@
 @media (prefers-color-scheme: light) {
 
     .clear img {
-        content: url('images/icons8-cancella-simbolo-64-black.png');
+        content: url('images/icons8-backspace-64-black.png');
     }
 
 }
